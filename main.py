@@ -1,18 +1,28 @@
+import pandas as pd
 from simulation.team import Team
 from simulation.group import Group
+from simulation.tournament import Tournament
 
 
 def main():
     """Main function."""
-    france = Team("France", "FRA", 1759.78)
-    spain = Team("Spain", "ESP", 1715.22)
-    argentina = Team("Argentina", "ARG", 1773.88)
-    england = Team("England", "ENG", 1728.47)
 
-    group_a = [france, spain, argentina, england]
+    groups = []
+    data = pd.read_csv("data/wordlcup.csv")
+    worldcup = data.groupby(['group']).groups
+    for key, value in worldcup.items():
+        teams = []
+        for i in value:
+            teams.append(Team(
+                data.loc[i]["country"], data.loc[i]["fifa_code"], data.loc[i]["fifa_score"]))
+        group = Group(key, teams)
+        groups.append(group)
 
-    group = Group("A", group_a)
-    group.get_results()
+    tournament = Tournament(groups)
+    tournament.play_group_stage()
+    tournament.initialize_knockout_stage()
+    tournament.play_knockout_stage()
+    tournament.display_tournament()
 
 
 if __name__ == "__main__":

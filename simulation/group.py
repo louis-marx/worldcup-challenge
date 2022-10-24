@@ -2,49 +2,43 @@ from simulation.match import Match
 
 
 class Group:
-    """Tournament group stage"""
+    """Group stage"""
 
-    def __init__(self, group, teams, games=[], points={}):
+    def __init__(self, id, teams):
         """Initialize a tournament pool"""
-        self.group = group
+        self.id = id
         self.teams = teams
-        self.games = games
+        self.games = []
         for i in range(len(self.teams)):
             for j in range(i + 1, len(self.teams)):
                 match = Match(self.teams[i], self.teams[j])
                 self.games.append(match)
-        self.points = points
+        self.points = {}
         for team in teams:
             self.points[team] = 0
 
     def play_games(self):
+        """Simulate the pool results"""
         for match in self.games:
             match.play_game()
-            if match.score[0] > match.score[1]:
+            if match.score[match.team_a] > match.score[match.team_b]:
                 self.points[match.team_a] += 3
-            elif match.score[0] == match.score[1]:
+            elif match.score[match.team_a] < match.score[match.team_b]:
+                self.points[match.team_b] += 3
+            else:
                 self.points[match.team_a] += 1
                 self.points[match.team_b] += 1
-            else:
-                self.points[match.team_b] += 3
-        return self.games
-
-    def display_games(self):
-        for match in self.games:
-            print(match.display_results())
         return None
 
-    def display_points(self):
-        results = ""
-        for key, value in self.points.items():
-            results += key.fifa_code + " " + str(value) + "\n"
-        return results
+# Need further improvements to take into account the fifa logic in case of a tie
+    def rank_teams(self):
+        """Rank teams from best to worst"""
+        return sorted(self.points.items(),
+                      key=lambda item: item[1], reverse=True)
 
-    def get_results(self):
-        print("\n##### GROUP " + self.group + " #####")
-        self.play_games()
-        print()
-        self.display_games()
-        print()
-        print(self.display_points())
-        return None
+    def get_winners(self):
+        """Retrieve the two group winners"""
+        winners = {}
+        winners[1] = self.rank_teams()[0][0]
+        winners[2] = self.rank_teams()[1][0]
+        return winners
