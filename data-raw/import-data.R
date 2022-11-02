@@ -26,18 +26,18 @@ internationalGamesCopy <- rename_with(internationalGamesCopy, ~ gsub("away_", ""
 internationalGamesCopy <- rename_with(internationalGamesCopy, ~ gsub("home_team", "opponent", .x))
 
 # Replace neutral_location with team_hosting and opponent_hosting variables from team perspective
-internationalGames <-  mutate(internationalGames, team_hosting = !neutral_location, .keep = "unused", .after = neutral_location)
+internationalGames <- mutate(internationalGames, team_hosting = !neutral_location, .keep = "unused", .after = neutral_location)
 internationalGames <- mutate(internationalGames, opponent_hosting = FALSE, .after = team_hosting)
 
 # Replace neutral_location with team_hosting and opponent_hosting variables from opponent perspective
-internationalGamesCopy <-  mutate(internationalGamesCopy, team_hosting = FALSE, .after = neutral_location)
+internationalGamesCopy <- mutate(internationalGamesCopy, team_hosting = FALSE, .after = neutral_location)
 internationalGamesCopy <- mutate(internationalGamesCopy, opponent_hosting = !neutral_location, .keep = "unused", .after = team_hosting)
 
 # Replace team_result with result variable from team perspective
 internationalGames <- rename(internationalGames, result = team_result)
 
 # Replace opponent_result with result variable from opponent perspective
-internationalGamesCopy <-  mutate(internationalGamesCopy, result = recode(opponent_result, Win = "Lose", Lose = "Win"), .keep = "unused", .after = opponent_result)
+internationalGamesCopy <- mutate(internationalGamesCopy, result = recode(opponent_result, Win = "Lose", Lose = "Win"), .keep = "unused", .after = opponent_result)
 
 Games <- bind_rows(internationalGames, internationalGamesCopy)
 Games <- mutate(Games, opponent_score = NULL)
