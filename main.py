@@ -8,7 +8,7 @@ def main():
     """Main function."""
 
     groups = []
-    data = pd.read_csv("data/wordlcup.csv")
+    data = pd.read_csv("data/teams.csv")
     worldcup = data.groupby(['group']).groups
     for key, value in worldcup.items():
         teams = []
