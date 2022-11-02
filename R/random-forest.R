@@ -1,7 +1,9 @@
 # install.packages("tree", repos = "http://cloud.r-project.org")
 # install.packages("randomForest", repos = "http://cloud.r-project.org")
+# install.packages("r2pmml", repos = "http://cloud.r-project.org")
 library(tree)
 library(randomForest)
+library(r2pmml)
 
 # Load data
 Games <- readRDS(file = "data/games_restructured.rds")
@@ -23,10 +25,11 @@ games.test <- unlist(Games[-train, 'team_score'])
 # print(mean((yhat - games.test)^2))
 
 # Random forest modelling
-rf.games <- randomForest(team_score ~ team + opponent + team*opponent + team_fifa_rank + opponent_fifa_rank + team_hosting + opponent_hosting, data = Games, subset = train, importance = TRUE)
+rf.games <- randomForest(team_score ~ team + opponent + team_fifa_rank + opponent_fifa_rank + team_hosting + opponent_hosting, data = Games, subset = train, importance = TRUE)
 predicted.score <- predict(rf.games, newdata = Games[-train,])
 print(mean((predicted.score - games.test)^2))
 print(importance(rf.games))
 varImpPlot(rf.games)
+r2pmml(rf.games, "models/random_forest.pmml")
 
 detach(Games)
