@@ -3,9 +3,7 @@ from simulation.utils import *
 from simulation.match import Match
 from simulation.knockout import Knockout
 
-FINAL_STAGE = ['  ROUND OF 16  ',
-               'QUARTER-FINALES', '  SEMI-FINALS  ', '     FINAL     ']
-
+STAGES = ['Round of 16', 'Quarter finals', 'Semi finals', 'Final', 'World Champion']
 
 class Tournament:
     """Soccer tournament"""
@@ -28,29 +26,40 @@ class Tournament:
             winners.append(group.get_winners())
         return winners
 
-    def initialize_knockout_stage(self):
+    def initialize_knockout_stage(self, report):
+        stage = STAGES[0]
         winners = self.get_groups_winners()
         games = []
         for i in range(0, len(winners), 2):
             games.append(Match(winners[i][1], winners[i+1][2]))
+            report.update(stage, [winners[i][1], winners[i+1][2]])
             games.append(Match(winners[i][2], winners[i+1][1]))
-        self.knockouts.append(Knockout(games))
+            report.update(stage, [winners[i][2], winners[i+1][1]])
+        self.knockouts.append(Knockout(stage, games))
         return None
 
-    def get_next_knockout(self):
+    def get_next_knockout(self, report):
+        stage = STAGES[len(self.knockouts)]
         self.knockouts[-1].play_games()
         winners = self.knockouts[-1].get_winners()
         games = []
         for i in range(0, len(winners), 2):
             games.append(Match(winners[i], winners[i+1]))
-        self.knockouts.append(Knockout(games))
+            report.update(stage, [winners[i], winners[i+1]])
+        self.knockouts.append(Knockout(stage, games))
         return None
 
-    def play_knockout_stage(self):
+    def play_knockout_stage(self, report):
         while len(self.knockouts[-1].games) > 1:
-            self.get_next_knockout()
+            self.get_next_knockout(report)
         self.knockouts[-1].play_games()
         return None
+
+    def get_winner(self, report):
+        stage = STAGES[-1]
+        winner = self.knockouts[-1].games[0].get_winner()
+        report.update(stage, [winner])
+        return winner
 
     @add_line_breaks
     def display_groups_headers(self):

@@ -21,16 +21,16 @@ class Group:
         """Simulate the pool results"""
         for match in self.games:
             match.play_game()
-            if match.score[match.team_a] > match.score[match.team_b]:
-                self.points[match.team_a] += 3
-            elif match.score[match.team_a] < match.score[match.team_b]:
-                self.points[match.team_b] += 3
+            if match.score[match.team] > match.score[match.opponent]:
+                self.points[match.team] += 3
+            elif match.score[match.team] < match.score[match.opponent]:
+                self.points[match.opponent] += 3
             else:
-                self.points[match.team_a] += 1
-                self.points[match.team_b] += 1
+                self.points[match.team] += 1
+                self.points[match.opponent] += 1
         return None
 
-# Need further improvements to take into account the fifa logic in case of a tie
+    # Need further improvements to take into account the fifa logic in case of a tie
     def rank_teams(self):
         """Rank teams from best to worst"""
         return sorted(self.points.items(),

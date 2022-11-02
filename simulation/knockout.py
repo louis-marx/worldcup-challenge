@@ -5,8 +5,9 @@ from simulation.utils import *
 class Knockout:
     """Tournament knockout stage"""
 
-    def __init__(self, games):
+    def __init__(self, stage, games):
         """Initialize a tournament knockout stage"""
+        self.stage = stage
         self.games = games
 
     def play_games(self):

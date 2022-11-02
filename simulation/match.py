@@ -5,33 +5,34 @@ from numpy import random
 class Match:
     """Soccer match"""
 
-    def __init__(self, team_a, team_b):
+    def __init__(self, team, opponent):
         """Initialize a soccer game"""
-        self.team_a = team_a
-        self.team_b = team_b
-        self.score = {team_a: 0, team_b: 0}
+        self.team = team
+        self.opponent = opponent
+        self.score = {team: 0, opponent: 0}
 
+    # To be further improved with modelling results
     def play_game(self):
         """Simulate the game result"""
-        self.score[self.team_a] = random.poisson(
-            (2*self.team_a.fifa_score-self.team_b.fifa_score)/self.team_b.fifa_score)
-        self.score[self.team_b] = random.poisson(
-            (2*self.team_b.fifa_score-self.team_a.fifa_score)/self.team_a.fifa_score)
+        self.score[self.team] = random.poisson(
+            (2*self.team.fifa_score-self.opponent.fifa_score)/self.opponent.fifa_score)
+        self.score[self.opponent] = random.poisson(
+            (2*self.opponent.fifa_score-self.team.fifa_score)/self.team.fifa_score)
         return None
 
-# Could be further improved to simulate real penalties
+    # Could be further improved to simulate real penalties
     def get_winner(self):
         """Retrieve the game winner"""
-        if self.score[self.team_a] > self.score[self.team_b]:
-            winner = self.team_a
-        elif self.score[self.team_a] < self.score[self.team_b]:
-            winner = self.team_b
+        if self.score[self.team] > self.score[self.opponent]:
+            winner = self.team
+        elif self.score[self.team] < self.score[self.opponent]:
+            winner = self.opponent
         else:
-            winner = random.choice([self.team_a, self.team_b])
+            winner = random.choice([self.team, self.opponent])
         return winner
 
     def display_results(self):
         """Display the game result"""
-        print(self.team_a.fifa_code + " " + str(self.score[self.team_a]) + " - " + str(
-            self.score[self.team_b]) + " " + self.team_b.fifa_code, end='     ')
+        print(self.team.fifa_code + " " + str(self.score[self.team]) + " - " + str(
+            self.score[self.opponent]) + " " + self.opponent.fifa_code, end='     ')
         return None
