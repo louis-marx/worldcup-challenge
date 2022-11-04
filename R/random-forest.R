@@ -24,7 +24,7 @@ score.test <- unlist(Games[-train, "team_score"])
 score.rf <- randomForest(team_score ~ ., data = Games, subset = train, keep.forest = TRUE, importance = TRUE, xtest = games.test, ytest = score.test)
 print(score.rf)
 print(importance(score.rf))
-# varImpPlot(score.rf)
+varImpPlot(score.rf)
 # r2pmml(rf.games, "models/random_forest.pmml")
 
 detach(Games)
@@ -53,3 +53,4 @@ for (i in 1:nrow(teams)) {
 }
 
 print(xgoal)
+write.csv(xgoal, file = "data/xgoal.csv")

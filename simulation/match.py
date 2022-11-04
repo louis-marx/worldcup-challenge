@@ -12,12 +12,10 @@ class Match:
         self.score = {team: 0, opponent: 0}
 
     # To be further improved with modelling results
-    def play_game(self):
+    def play_game(self, xgoal):
         """Simulate the game result"""
-        self.score[self.team] = random.poisson(
-            (2*self.team.fifa_score-self.opponent.fifa_score)/self.opponent.fifa_score)
-        self.score[self.opponent] = random.poisson(
-            (2*self.opponent.fifa_score-self.team.fifa_score)/self.team.fifa_score)
+        self.score[self.team] = random.poisson(xgoal.loc[self.team.team_fifa_code, self.opponent.team_fifa_code])
+        self.score[self.opponent] = random.poisson(xgoal.loc[self.opponent.team_fifa_code, self.team.team_fifa_code])
         return None
 
     # Could be further improved to simulate real penalties

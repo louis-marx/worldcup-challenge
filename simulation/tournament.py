@@ -13,10 +13,10 @@ class Tournament:
         self.groups = groups
         self.knockouts = []
 
-    def play_group_stage(self):
+    def play_group_stage(self, xgoal):
         """Simulate the group stage results"""
         for group in self.groups:
-            group.play_games()
+            group.play_games(xgoal)
         return None
 
     def get_groups_winners(self):
@@ -38,9 +38,9 @@ class Tournament:
         self.knockouts.append(Knockout(stage, games))
         return None
 
-    def get_next_knockout(self, report):
+    def get_next_knockout(self, xgoal, report):
         stage = STAGES[len(self.knockouts)]
-        self.knockouts[-1].play_games()
+        self.knockouts[-1].play_games(xgoal)
         winners = self.knockouts[-1].get_winners()
         games = []
         for i in range(0, len(winners), 2):
@@ -49,10 +49,10 @@ class Tournament:
         self.knockouts.append(Knockout(stage, games))
         return None
 
-    def play_knockout_stage(self, report):
+    def play_knockout_stage(self, xgoal, report):
         while len(self.knockouts[-1].games) > 1:
-            self.get_next_knockout(report)
-        self.knockouts[-1].play_games()
+            self.get_next_knockout(xgoal, report)
+        self.knockouts[-1].play_games(xgoal)
         return None
 
     def get_winner(self, report):

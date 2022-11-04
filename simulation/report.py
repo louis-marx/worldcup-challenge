@@ -11,12 +11,12 @@ class Report:
         self.proba = pd.DataFrame(columns=self.STAGES)
 
     def add_team(self, team):
-        self.proba = pd.concat([self.proba, pd.Series(0, index=self.proba.columns, name=team.fifa_code).to_frame().T])
+        self.proba = pd.concat([self.proba, pd.Series(0, index=self.proba.columns, name=team.team_fifa_code).to_frame().T])
         return None
     
     def update(self, stage, teams):
         for team in teams:
-            self.proba.loc[team.fifa_code, stage] += 1
+            self.proba.loc[team.team_fifa_code, stage] += 1
 
     def get_report(self):
         order = self.STAGES
