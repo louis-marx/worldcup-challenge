@@ -41,7 +41,7 @@ internationalGamesCopy <- mutate(internationalGamesCopy, result = recode(opponen
 
 Games <- bind_rows(internationalGames, internationalGamesCopy)
 Games <- mutate(Games, opponent_score = NULL)
-Games <- mutate(Games, across(c(team_continent, opponent_continent, shoot_out, result), as.factor))
+# Games <- mutate(Games, across(c(team_continent, opponent_continent, shoot_out, result), as.factor))
 Games <- arrange(Games, date, city)
 View(Games)
 
