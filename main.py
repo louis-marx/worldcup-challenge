@@ -4,7 +4,8 @@ from simulation.group import Group
 from simulation.tournament import Tournament
 from simulation.report import Report
 
-NUMBER_OF_SIMULATIONS = 10000
+NUMBER_OF_SIMULATIONS = 100000
+
 
 def main():
     """Main function."""
@@ -22,7 +23,8 @@ def main():
     for key, value in worldcup.items():
         teams = []
         for i in value:
-            team = Team(data.loc[i]["team"], data.loc[i]["team_fifa_code"], data.loc[i]["team_total_fifa_points"])
+            team = Team(data.loc[i]["team"], data.loc[i]
+                        ["team_fifa_code"], data.loc[i]["team_total_fifa_points"])
             teams.append(team)
             report.add_team(team)
         group = Group(key, teams)
