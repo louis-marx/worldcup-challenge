@@ -11,7 +11,7 @@ def main():
     """Main function."""
 
     # Load data
-    data = pd.read_csv("data/teams.csv")
+    data = pd.read_csv("data-raw/teams.csv")
     xgoal = pd.read_csv("data/xgoal.csv", index_col=0)
 
     # Initialize a simulation report
@@ -24,7 +24,7 @@ def main():
         teams = []
         for i in value:
             team = Team(data.loc[i]["team"], data.loc[i]
-                        ["team_fifa_code"], data.loc[i]["team_total_fifa_points"])
+                        ["team_fifa_code"])
             teams.append(team)
             report.add_team(team)
         group = Group(key, teams)
@@ -40,6 +40,8 @@ def main():
     print()
     print(report.get_report())
     print()
+
+    report.get_report().to_csv('outputs/simulation_report.csv')
 
 
 if __name__ == "__main__":
