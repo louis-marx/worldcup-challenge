@@ -1,3 +1,4 @@
+import collections
 import pandas as pd
 from simulation.team import Team
 from simulation.group import Group
@@ -11,7 +12,7 @@ def main():
     """Main function."""
 
     # Load data
-    data = pd.read_csv("data-raw/teams.csv")
+    data = pd.read_csv("data-raw/worldcup_teams.csv")
     xgoal = pd.read_csv("data/xgoal.csv", index_col=0)
 
     # Initialize a simulation report
@@ -30,19 +31,41 @@ def main():
         group = Group(key, teams)
         groups.append(group)
 
-    for i in range(NUMBER_OF_SIMULATIONS):
-        tournament = Tournament(groups)
-        tournament.play_group_stage(xgoal)
-        tournament.initialize_knockout_stage(report)
-        tournament.play_knockout_stage(xgoal, report)
-        tournament.get_winner(report)
+    # for i in range(NUMBER_OF_SIMULATIONS):
+    #     tournament = Tournament(groups)
+    #     tournament.play_group_stage(xgoal)
+    #     tournament.initialize_knockout_stage(report)
+    #     tournament.play_knockout_stage(xgoal, report)
+    #     tournament.get_winner(report)
+
+    # print()
+    # print(report.get_report())
+    # print()
+
+    # report.get_report().to_csv('outputs/simulation_report.csv')
+
+    group_proba = {}
+    for group in groups:
+        group_proba[group.id] = []
+        for i in range(NUMBER_OF_SIMULATIONS):
+            group.play_games(xgoal)
+            # outcome = ' '.join([team[0].team for team in group.rank_teams()])
+            outcome = group.get_winners()[1].team + '/' + group.get_winners()[2].team
+            group_proba[group.id].append(outcome)
+            group.reset()
+            # print(outcome)
+    
+    group_stage = pd.DataFrame(columns=['Group', 'First', 'Second', 'Odd'])
+    for key, value in group_proba.items():
+        counter = collections.Counter(value)
+        result = [key] + counter.most_common(1)[0][0].split('/') + [100*counter.most_common(1)[0][1]/NUMBER_OF_SIMULATIONS]
+        group_stage = pd.concat([group_stage, pd.Series(result, index=group_stage.columns).to_frame().T])
 
     print()
-    print(report.get_report())
+    print(group_stage)
     print()
 
-    report.get_report().to_csv('outputs/simulation_report.csv')
-
+    group_stage.to_csv('outputs/most_probable_group_outcomes.csv', index=False)
 
 if __name__ == "__main__":
     main()

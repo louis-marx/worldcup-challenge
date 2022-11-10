@@ -5,3 +5,4 @@ class Team:
         """Initialize a soccer team"""
         self.team = team
         self.team_fifa_code = team_fifa_code
+

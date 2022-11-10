@@ -31,6 +31,10 @@ class Match:
             winner = random.choice([self.team, self.opponent])
         return winner
 
+    def reset(self):
+        self.score = {self.team: 0, self.opponent: 0}
+        return None
+
     def display_results(self):
         """Display the game result"""
         print(self.team.fifa_code + " " + str(self.score[self.team]) + " - " + str(

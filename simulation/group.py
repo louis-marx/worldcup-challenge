@@ -42,3 +42,10 @@ class Group:
         winners[1] = self.rank_teams()[0][0]
         winners[2] = self.rank_teams()[1][0]
         return winners
+
+    def reset(self):
+        for game in self.games:
+            game.reset()
+        for team in self.teams:
+            self.points[team] = 0
+        return None
