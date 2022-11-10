@@ -28,9 +28,10 @@ games_to_train <- na.omit(games_to_train)
 
 # games_wt <- ifelse(games$tournament == "FIFA World Cup", 3, 1)
 score.rf <- randomForest(team_score ~ ., data = games_to_train, mtry = 1, importance = TRUE, do.trace = TRUE)
+# score.rf <- randomForest(team_score ~ ., data = games_to_train, importance = TRUE, do.trace = TRUE)
 print(score.rf)
-print(round(importance(score.rf), 2))
-# varImpPlot(score.rf)
+print(importance(score.rf))
+varImpPlot(score.rf)
 
 
 ### Generate an expected goals matrix for each encounter
