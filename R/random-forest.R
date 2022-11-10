@@ -27,11 +27,15 @@ games_to_train <- na.omit(games_to_train)
 ### Regression with Random Forest
 
 # games_wt <- ifelse(games$tournament == "FIFA World Cup", 3, 1)
-score.rf <- randomForest(team_score ~ ., data = games_to_train, mtry = 1, importance = TRUE, do.trace = TRUE)
-# score.rf <- randomForest(team_score ~ ., data = games_to_train, importance = TRUE, do.trace = TRUE)
+score.rf <- randomForest(team_score ~ ., data = games_to_train, mtry = 1, importance = TRUE)
+# score.rf <- randomForest(team_score ~ ., data = games_to_train, importance = TRUE)
 print(score.rf)
 print(importance(score.rf))
+
+# ### Save variables importance plot as a jpeg file
+jpeg("outputs/varImpPlot.jpg", width = 1050, height = 1485)
 varImpPlot(score.rf)
+dev.off()
 
 
 ### Generate an expected goals matrix for each encounter

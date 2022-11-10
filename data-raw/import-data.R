@@ -31,6 +31,9 @@ teams_to_train <- teams_to_train[, "country"]
 # Load country to continent mapping
 country_continent <- read.csv("data-raw/country_continent.csv", colClasses = c("character", "character"))
 
+# Load hapiness scores dataset
+hapiness_scores <- read.csv("data-raw/hapiness_scores.csv", colClasses = c("character", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric"))
+
 # Load teams_to_predict dataset
 teams_to_predict <- read.csv("data-raw/worldcup_teams.csv", colClasses = c("character", "character", "character"))
 teams_to_predict <- teams_to_predict[, "team"]
@@ -115,6 +118,20 @@ for (i in seq_len(nrow(games))){
 
     # Add continent variable
     games$continent[i] <- country_continent$continent[country_continent$country == games$country[i]]
+
+    # Add hapiness score variable
+    # games$team_hapiness_score[i] <- 
+    year <- make.names(format(games$date[i], format = "%Y"))
+    if (year %in% names(hapiness_scores)){
+        a <- which(colnames(hapiness_scores) == year)
+        b <- which(hapiness_scores$country == games$team[i])
+        c <- which(hapiness_scores$country == games$opponent[i])
+        games$team_hapiness_score[i] <- hapiness_scores[b, a]
+        games$opponent_hapiness_score[i] <- hapiness_scores[c, a]
+    } else {
+        games$team_hapiness_score[i] <- NaN
+        games$opponent_hapiness_score[i] <- NaN
+    }
 }
 
 # Convert string and boolean variables as factors
@@ -209,7 +226,6 @@ for (i in 1:nrow(teams)) {
         game <- mutate(game, opponent_hosting = opponent == "Qatar")
         game <- mutate(game, team_same_continent = team_continent == "Asia")
         game <- mutate(game, opponent_same_continent = opponent_continent == "Asia")
-        # game <- mutate(game, country = "Qatar")
         game <- mutate(game, tournament = "FIFA World Cup")
         games_to_predict <- bind_rows(games_to_predict, game)
     }
