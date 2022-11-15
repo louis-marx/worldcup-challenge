@@ -4,7 +4,11 @@ A database was provided to us by the organizers of the challenge.
 
 
 
-
+```ruby
+require 'redcarpet'
+markdown = Redcarpet.new("Hello World!")
+puts markdown.to_html
+```
 
 
 
@@ -56,6 +60,18 @@ This site was built using [GitHub Pages](https://pages.github.com/).
 100. First list item
      - First nested list item
        - Second nested list item
+
+
+Here is a simple flow chart:
+
+```mermaid
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+```
+
        
 - [x] #739
 - [ ] https://github.com/octo-org/octo-repo/issues/740
