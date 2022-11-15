@@ -37,6 +37,6 @@ class Match:
 
     def display_results(self):
         """Display the game result"""
-        print(self.team.fifa_code + " " + str(self.score[self.team]) + " - " + str(
-            self.score[self.opponent]) + " " + self.opponent.fifa_code, end='     ')
+        print(self.team.team_fifa_code + " " + str(self.score[self.team]) + " - " + str(
+            self.score[self.opponent]) + " " + self.opponent.team_fifa_code, end='     ')
         return None

@@ -3,7 +3,9 @@ from simulation.utils import *
 from simulation.match import Match
 from simulation.knockout import Knockout
 
-STAGES = ['Round of 16', 'Quarter finals', 'Semi finals', 'Final', 'World Champion']
+STAGES = ['Round of 16', 'Quarter finals',
+          'Semi finals', 'Final', 'World Champion']
+
 
 class Tournament:
     """Soccer tournament"""
@@ -33,6 +35,7 @@ class Tournament:
         for i in range(0, len(winners), 2):
             games.append(Match(winners[i][1], winners[i+1][2]))
             report.update(stage, [winners[i][1], winners[i+1][2]])
+        for i in range(0, len(winners), 2):
             games.append(Match(winners[i][2], winners[i+1][1]))
             report.update(stage, [winners[i][2], winners[i+1][1]])
         self.knockouts.append(Knockout(stage, games))
@@ -61,6 +64,12 @@ class Tournament:
         report.update(stage, [winner])
         return winner
 
+    def reset(self):
+        for group in self.groups:
+            group.reset()
+        self.knockouts = []
+        return None
+
     @add_line_breaks
     def display_groups_headers(self):
         """Display groups names"""
@@ -86,7 +95,7 @@ class Tournament:
         print("RESULTS :", end='   ')
         for i in range(len(self.groups[0].teams)):
             for group in self.groups:
-                print(str(i+1) + " " + group.rank_teams()[i][0].fifa_code +
+                print(str(i+1) + " " + group.rank_teams()[i][0].team_fifa_code +
                       " (" + str(group.rank_teams()[i][1]) + " PTS)", end='     ')
             print()
             time.sleep(.1)
@@ -107,7 +116,7 @@ class Tournament:
         time.sleep(.1)
         print(end='            ')
         print(59*'=', end='   ')
-        print(FINAL_STAGE[i], end='   ')
+        print(STAGES[i], end='   ')
         print(59*'=')
         time.sleep(.1)
         return None
