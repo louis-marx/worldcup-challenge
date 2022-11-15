@@ -21,6 +21,16 @@ Transformed into
 | 7/10/2018 | France | Belgium | 3 | 1 | FIFA World Cup | False | False |
 | 7/10/2018 | Belgium | France | -3 | 0 | FIFA World Cup | False | False |
 
+### Data Cleaning
+
+We cleaned the dataset that we had by selecting the rows in which the teams taking part in the 2022 World Cup were represented (32 teams) + a bunch of other high-qualityteams that will not play in the World Cup but that can still be relevant to train our prediction model. The goal was to avoid having low-end teams shaping our model.
+
+RandomForest models allow for up to 53 possibilities for one variables, so we could keep 21 extra teams. The selected teams are in [countries_selection.csv](data-raw/countries_selection.csv).
+
+### Data Preparation
+
+As performance indicators for the prevision of goals, we chose to keep the goalkeeper, defense, midfield and offense scores alredy present in the dataset and to add additional indicators such as stars (= how many World Cups had the team won at the moment of the game) and hapiness index of the team's country at the time of the game. Some teams' scores were missing so we took the computation method from Kaggle and added them ourselves.
+
 ## Simulation
 
 ### Class Diagram
