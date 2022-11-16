@@ -5,32 +5,30 @@ library(dplyr)
 
 
 ### Load data
-# games_to_train <- readRDS(file = "data/games_to_train.rds")
-# games_to_train <- na.omit(games_to_train)
-# gamesx <- games_to_train[, -7]
-# gamesy <- games_to_train[, 7]
+games_to_train <- readRDS(file = "data/games_to_train.rds")
+games_to_train <- na.omit(games_to_train)
+gamesx <- games_to_train[, -7]
+gamesy <- games_to_train[, 7]
 
 ### Feature selection
-# p <- ncol(gamesx)
-# n.var <- seq(from = p, to = 1, by = -1)
-# k <- length(n.var)
-# all.rf <- randomForest(team_score ~ ., data = games_to_train, mtry = 1, ntree = 1000, importance = TRUE)
-# impvar <- (1:p)[order(importance(all.rf, type = 1), decreasing = TRUE)]
-# subset <- impvar
-# mse <- all.rf$mse[length(all.rf$mse)]
-# print(all.rf$mse[length(all.rf$mse)])
-# for (j in 2:k) {
-# imp.idx <- impvar[1:n.var[j]]
-# sub.rf <- randomForest(gamesx[, imp.idx, drop = FALSE], gamesy, mtry = 1, ntree = 1000, importance = TRUE)
-# impvar <- (1:length(imp.idx))[order(importance(sub.rf, type = 1), decreasing = TRUE)]
-# if (sub.rf$mse[length(sub.rf$mse)] < mse) {
-# mse <- sub.rf$mse[length(sub.rf$mse)]
-# subset <- impvar
-# }
-# print(sub.rf$mse[length(all.rf$mse)])
-# }
-
-# print(colnames(gamesx)[subset])
+p <- ncol(gamesx)
+n.var <- seq(from = p, to = 1, by = -1)
+k <- length(n.var)
+all.rf <- randomForest(team_score ~ ., data = games_to_train, mtry = 1, ntree = 1000, importance = TRUE)
+impvar <- (1:p)[order(importance(all.rf, type = 1), decreasing = TRUE)]
+subset <- impvar
+mse <- all.rf$mse[length(all.rf$mse)]
+print(all.rf$mse[length(all.rf$mse)])
+for (j in 2:k) {
+    imp.idx <- impvar[1:n.var[j]]
+    sub.rf <- randomForest(gamesx[, imp.idx, drop = FALSE], gamesy, mtry = 1, ntree = 1000, importance = TRUE)
+    impvar <- (1:length(imp.idx))[order(importance(sub.rf, type = 1), decreasing = TRUE)]
+    if (sub.rf$mse[length(sub.rf$mse)] < mse) {
+        mse <- sub.rf$mse[length(sub.rf$mse)]
+        subset <- impvar
+}
+print(sub.rf$mse[length(all.rf$mse)])
+}
 
 ### Tune randomForest for the optimal mtry parameter
 # mse <- Inf
@@ -51,14 +49,14 @@ library(dplyr)
 ### Regression with Random Forest
 
 # games_wt <- ifelse(games$tournament == "FIFA World Cup", 3, 1)
-# score.rf <- randomForest(gamesx[, subset], gamesy, mtry = 1, ntree = 10000, importance = TRUE, do.trace = TRUE)
-# print(score.rf)
-# print(importance(score.rf))
+score.rf <- randomForest(gamesx[, subset], gamesy, mtry = 1, ntree = 10000, importance = TRUE, do.trace = TRUE)
+print(score.rf)
+print(importance(score.rf))
 
 # ### Save variables importance plot as a jpeg file
-# jpeg("outputs/varImpPlot.jpg", width = 1050, height = 1485)
-# varImpPlot(score.rf)
-# dev.off()
+jpeg("outputs/varImpPlot.jpg", width = 1050, height = 1485)
+varImpPlot(score.rf)
+dev.off()
 
 
 ### Generate an expected goals matrix for each encounter
