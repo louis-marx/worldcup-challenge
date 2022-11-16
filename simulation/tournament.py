@@ -96,7 +96,7 @@ class Tournament:
         for i in range(len(self.groups[0].teams)):
             for group in self.groups:
                 print(str(i+1) + " " + group.rank_teams()[i][0].team_fifa_code +
-                      " (" + str(group.rank_teams()[i][1]) + " PTS)", end='     ')
+                      " (" + str(group.rank_teams()[i][1][0]) + " PTS)", end='     ')
             print()
             time.sleep(.1)
             print(end='            ')
