@@ -17,27 +17,48 @@ def main():
     xgoal = pd.read_csv("data/xgoal.csv", index_col=0)
 
     # Initialize a simulation report
-    # report = Report(NUMBER_OF_SIMULATIONS)
+    report = Report(NUMBER_OF_SIMULATIONS)
+
+    most_probable_outcomes = xgoal
+    for i in range(xgoal.shape[0]):
+        for j in range(xgoal.shape[1]):
+            score = 0
+            proba = 0
+            for k in range(5):
+                if poisson.pmf(k, xgoal.iloc[i, j]) > proba:
+                    score = k
+                    proba = poisson.pmf(k, xgoal.iloc[i, j])
+            most_probable_outcomes.iloc[i, j] = score
+    
+    print()
+    print(most_probable_outcomes)
+    print()
+
+    most_probable_outcomes.to_csv('outputs/most_probable_outcomes.csv')
 
     # Translate teams from csv to python objects
-    # worldcup = data.groupby(['group']).groups
-    # groups = []
-    # for key, value in worldcup.items():
-    #     teams = []
-    #     for i in value:
-    #         team = Team(data.loc[i]["team"], data.loc[i]
-    #                     ["team_fifa_code"])
-    #         teams.append(team)
-    #         report.add_team(team)
-    #     group = Group(key, teams)
-    #     groups.append(group)
+    worldcup = data.groupby(['group']).groups
+    groups = []
+    for key, value in worldcup.items():
+        teams = []
+        for i in value:
+            team = Team(data.loc[i]["team"], data.loc[i]
+                        ["team_fifa_code"])
+            teams.append(team)
+            report.add_team(team)
+        group = Group(key, teams)
+        groups.append(group)
 
-    # tournament = Tournament(groups)
-    # tournament.play_group_stage(xgoal)
-    # tournament.display_group_stage()
-    # tournament.initialize_knockout_stage(report)
-    # tournament.play_knockout_stage(xgoal, report)
-    # tournament.display_knockout_stage()
+    tournament = Tournament(groups)
+    tournament.play_group_stage(most_probable_outcomes, False)
+    tournament.display_group_stage()
+    tournament.initialize_knockout_stage(report)
+    tournament.play_knockout_stage(most_probable_outcomes, False, report)
+    tournament.display_knockout_stage()
+
+
+
+
 
     # tournament = Tournament(groups)
     # for i in range(NUMBER_OF_SIMULATIONS):
@@ -80,22 +101,6 @@ def main():
 
     # group_stage.to_csv('outputs/most_probable_group_outcomes.csv', index=False)
 
-    most_probable_outcomes = xgoal
-    for i in range(xgoal.shape[0]):
-        for j in range(xgoal.shape[1]):
-            score = 0
-            proba = 0
-            for k in range(5):
-                if poisson.pmf(k, xgoal.iloc[i, j]) > proba:
-                    score = k
-                    proba = poisson.pmf(k, xgoal.iloc[i, j])
-            most_probable_outcomes.iloc[i, j] = score
-    
-    print()
-    print(most_probable_outcomes)
-    print()
-
-    most_probable_outcomes.to_csv('outputs/most_probable_outcomes.csv')
 
 
 

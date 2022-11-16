@@ -17,10 +17,10 @@ class Group:
         for team in teams:
             self.points[team] = [0, 0, 0]
 
-    def play_games(self, xgoal):
+    def play_games(self, xgoal, random):
         """Simulate the pool results"""
         for match in self.games:
-            match.play_game(xgoal)
+            match.play_game(xgoal, random)
             if match.score[match.team] > match.score[match.opponent]:
                 self.points[match.team][0] += 3
             elif match.score[match.team] < match.score[match.opponent]:

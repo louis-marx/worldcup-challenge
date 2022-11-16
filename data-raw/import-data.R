@@ -147,7 +147,7 @@ print(str(games))
 
 
 
-###########################  Create a games_to_train dataset for modelling purpose ############################
+###########################  Create a games_to_train dataset for score modelling purpose ############################
 
 # Transform fifa rank and points variables into differences
 games_to_train <- mutate(games, fifa_rank_difference = opponent_fifa_rank - team_fifa_rank, .keep = "unused", .after = opponent_fifa_rank)
@@ -174,6 +174,43 @@ print(str(games_to_train))
 
 # Export the resulting dataset into a RDS format
 saveRDS(games_to_train, "data/games_to_train.rds")
+
+###############################################################################################################
+
+
+
+
+
+###########################  Create a games_to_train dataset for shoot_out modelling purpose ############################
+
+# # Transform fifa rank and points variables into differences
+# shootout_to_train <- mutate(games, fifa_rank_difference = opponent_fifa_rank - team_fifa_rank, .keep = "unused", .after = opponent_fifa_rank)
+# shootout_to_train <- mutate(shootout_to_train, fifa_points_difference = team_total_fifa_points - opponent_total_fifa_points, .keep = "unused", .after = opponent_total_fifa_points)
+
+# # Transform continent informations into boolean
+# shootout_to_train <- mutate(shootout_to_train, team_same_continent = factor(team_continent == continent))
+# shootout_to_train <- mutate(shootout_to_train, opponent_same_continent = factor(opponent_continent == continent))
+
+# # Keep only games that ended with shoot out
+# shootout_to_train <- filter(shootout_to_train, shoot_out == 'Yes')
+
+# # Drop useless variables for future modeling
+# shootout_to_train <- mutate(shootout_to_train, shoot_out = NULL, date = NULL, city = NULL, country = NULL, continent = NULL)
+
+# # Convert tibble to dataframe
+# shootout_to_train <- as.data.frame(shootout_to_train)
+
+# # Store country and tournament levels for later
+# tournaments <- levels(shootout_to_train$tournament)
+# # countries <- levels(games_to_train$country)
+# hosting <- levels(shootout_to_train$team_hosting)
+
+# # Quick preview of the dataframe to check if everything's ok
+# print(str(shootout_to_train))
+# # print(sample_n(games_to_train, 10))
+
+# # Export the resulting dataset into a RDS format
+# saveRDS(shootout_to_train, "data/shootouts_to_train.rds")
 
 ###############################################################################################################
 
@@ -247,5 +284,54 @@ print(str(games_to_predict))
 
 # # Export the resulting dataset into a RDS format
 saveRDS(games_to_predict, "data/games_to_predict.rds")
+
+###############################################################################################################
+
+
+
+
+
+#########################  Create a shootouts_to_predict dataset to prepare the simuation ####################
+
+# # Create an empty list
+# shootouts_to_predict <- NULL
+
+# # Generate all possible games
+# for (i in 1:nrow(teams)) {
+#     for (j in 1:nrow(teams)) {
+#         for (k in 0:4){
+#             team <- teams[i, ]
+#             opponent <- rename_with(teams[j, ], ~ gsub("team", "opponent", .x))
+#             game <- bind_cols(team, opponent)
+#             game <- mutate(game, fifa_rank_difference = opponent_fifa_rank - team_fifa_rank, .keep = "unused", .after = opponent_fifa_rank)
+#             game <- mutate(game, fifa_points_difference = team_total_fifa_points - opponent_total_fifa_points, .keep = "unused", .after = opponent_total_fifa_points)
+#             game <- mutate(game, team_hosting = team == "Qatar")
+#             game <- mutate(game, opponent_hosting = opponent == "Qatar")
+#             game <- mutate(game, team_same_continent = team_continent == "Asia")
+#             game <- mutate(game, opponent_same_continent = opponent_continent == "Asia")
+#             game <- mutate(game, tournament = "FIFA World Cup")
+#             game <- mutate(game, team_score = k)
+#             game <- mutate(game, opponent_score = k)
+#             shootouts_to_predict <- bind_rows(shootouts_to_predict, game)
+#         }
+#     }
+# }
+
+# # Transforme variables to factor to match training data types
+# # games_to_predict <- mutate(games_to_predict, country = factor(country, levels = countries))
+# shootouts_to_predict <- mutate(shootouts_to_predict, tournament = factor(tournament, levels = tournaments))
+# shootouts_to_predict <- mutate(shootouts_to_predict, team_hosting = factor(team_hosting, levels = hosting))
+# shootouts_to_predict <- mutate(shootouts_to_predict, opponent_hosting = factor(opponent_hosting, levels = hosting))
+# shootouts_to_predict <- mutate(shootouts_to_predict, team_same_continent = factor(team_same_continent, levels = hosting))
+# shootouts_to_predict <- mutate(shootouts_to_predict, opponent_same_continent = factor(opponent_same_continent, levels = hosting))
+
+# # Convert tibble to dataframe
+# shootouts_to_predict <- as.data.frame(shootouts_to_predict)
+
+# # Quick preview of the dataframe to check if everything's ok
+# print(str(shootouts_to_predict))
+
+# # # Export the resulting dataset into a RDS format
+# saveRDS(shootouts_to_predict, "data/shootouts_to_predict.rds")
 
 ###############################################################################################################

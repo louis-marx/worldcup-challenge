@@ -10,9 +10,9 @@ class Knockout:
         self.stage = stage
         self.games = games
 
-    def play_games(self, xgoal):
+    def play_games(self, xgoal, random):
         for match in self.games:
-            match.play_game(xgoal)
+            match.play_game(xgoal, random)
         return None
 
     def get_winners(self):
