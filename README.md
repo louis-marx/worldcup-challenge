@@ -41,6 +41,10 @@ To model the number of goals a team scores in a given match, we decided to use a
 - We thought that this method would be easier to explain to a public not necessarily initiated.
 - In view of the large number of qualitative predictors and their large number of different values, we thought that decision trees would handle them more easily.
 
+### Variable Importance
+
+![Variable Importance](outputs/varImpPlot.jpg)
+
 ## Simulation
 
 To simulate world cups, we have chosen an object-oriented approach. Starting by creating a class to represent a team, we progressively made our simulation more complex by creating matches, then groups and knockout phases, until we were able to model an entire tournament. The few points of attention were to algorithmically reproduce the FIFA logic to break ties within the groups and the distribution of teams at the beginning of the knockout phase. In our simulations, the scores of the games were simulated using the results of our predictive model.
@@ -105,4 +109,15 @@ classDiagram
    Group --o Tournament
    Knockout --o Tournament
    Report --o Tournament
+```
+
+### Most probable Outcome
+
+```mermaid
+flowchart LR
+    RS1([FRA 1 - 0 BEL])
+    RS2([NED 2 - 3 BRA])
+    QF1([FRA 1 - 2 BRA])
+    RS1-->|64%|QF1
+    RS2-->|56%|QF1
 ```
