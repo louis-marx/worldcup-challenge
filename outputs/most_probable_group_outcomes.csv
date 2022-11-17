@@ -1,9 +1,25 @@
 Group,First,Second,Likelihood
-A,Netherlands,Senegal,15.542
-B,England,USA,22.34
-C,Argentina,Poland,22.615
-D,France,Denmark,24.166
-E,Spain,Germany,26.437
-F,Belgium,Croatia,19.516
-G,Brazil,Switzerland,24.771
-H,Portugal,Uruguay,23.265
+A,Netherlands,Qatar,16.0
+A,Netherlands,Ecuador,14.0
+A,Netherlands,Senegal,14.0
+B,England,USA,21.0
+B,England,IR Iran,17.0
+B,England,Wales,16.0
+C,Argentina,Poland,28.0
+C,Argentina,Mexico,19.0
+C,Argentina,Saudi Arabia,16.0
+D,France,Denmark,22.0
+D,Denmark,France,17.0
+D,Denmark,Tunisia,10.0
+E,Spain,Germany,22.0
+E,Germany,Spain,19.0
+E,Spain,Japan,14.0
+F,Belgium,Croatia,20.0
+F,Belgium,Morocco,16.0
+F,Croatia,Belgium,15.0
+G,Brazil,Serbia,23.0
+G,Brazil,Switzerland,23.0
+G,Switzerland,Brazil,14.0
+H,Portugal,Uruguay,22.0
+H,Uruguay,Portugal,15.0
+H,Portugal,Korea Republic,14.0

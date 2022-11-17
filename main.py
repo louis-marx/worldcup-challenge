@@ -19,22 +19,22 @@ def main():
     # Initialize a simulation report
     report = Report(NUMBER_OF_SIMULATIONS)
 
-    most_probable_outcomes = xgoal
-    for i in range(xgoal.shape[0]):
-        for j in range(xgoal.shape[1]):
-            score = 0
-            proba = 0
-            for k in range(5):
-                if poisson.pmf(k, xgoal.iloc[i, j]) > proba:
-                    score = k
-                    proba = poisson.pmf(k, xgoal.iloc[i, j])
-            most_probable_outcomes.iloc[i, j] = score
+    # most_probable_outcomes = xgoal
+    # for i in range(xgoal.shape[0]):
+    #     for j in range(xgoal.shape[1]):
+    #         score = 0
+    #         proba = 0
+    #         for k in range(5):
+    #             if poisson.pmf(k, xgoal.iloc[i, j]) > proba:
+    #                 score = k
+    #                 proba = poisson.pmf(k, xgoal.iloc[i, j])
+    #         most_probable_outcomes.iloc[i, j] = score
     
-    print()
-    print(most_probable_outcomes)
-    print()
+    # print()
+    # print(most_probable_outcomes)
+    # print()
 
-    most_probable_outcomes.to_csv('outputs/most_probable_outcomes.csv')
+    # most_probable_outcomes.to_csv('outputs/most_probable_outcomes.csv')
 
     # Translate teams from csv to python objects
     worldcup = data.groupby(['group']).groups
@@ -49,57 +49,63 @@ def main():
         group = Group(key, teams)
         groups.append(group)
 
-    tournament = Tournament(groups)
-    tournament.play_group_stage(most_probable_outcomes, False)
-    tournament.display_group_stage()
-    tournament.initialize_knockout_stage(report)
-    tournament.play_knockout_stage(most_probable_outcomes, False, report)
-    tournament.display_knockout_stage()
-
-
-
-
-
     # tournament = Tournament(groups)
-    # for i in range(NUMBER_OF_SIMULATIONS):
-    #     tournament.play_group_stage(xgoal)
-    #     tournament.initialize_knockout_stage(report)
-    #     tournament.play_knockout_stage(xgoal, report)
-    #     tournament.get_winner(report)
-    #     tournament.reset()
+    # tournament.play_group_stage(most_probable_outcomes, False)
+    # tournament.display_group_stage()
+    # tournament.initialize_knockout_stage(report)
+    # tournament.play_knockout_stage(most_probable_outcomes, False, report)
+    # tournament.display_knockout_stage()
 
-    # print()
-    # print(report.get_report())
-    # print()
 
-    # report.get_report().to_csv('outputs/simulation_report.csv')
+    tournament = Tournament(groups)
+    for i in range(NUMBER_OF_SIMULATIONS):
+        tournament.play_group_stage(xgoal, True)
+        tournament.initialize_knockout_stage(report)
+        tournament.play_knockout_stage(xgoal, True, report)
+        tournament.get_winner(report)
+        tournament.reset()
+
+    print()
+    print(report.get_report())
+    print()
+
+    report.get_report().to_csv('outputs/simulation_report.csv')
 
     # group_proba = {}
     # for group in groups:
     #     group_proba[group.id] = []
     #     for i in range(NUMBER_OF_SIMULATIONS):
-    #         group.play_games(xgoal)
-    #         # outcome = ' '.join([team[0].team for team in group.rank_teams()])
+    #         group.play_games(xgoal, True)
     #         outcome = group.get_winners(
     #         )[1].team + '/' + group.get_winners()[2].team
     #         group_proba[group.id].append(outcome)
     #         group.reset()
-    #         # print(outcome)
 
     # group_stage = pd.DataFrame(
     #     columns=['Group', 'First', 'Second', 'Likelihood'])
+    # group_winners = []
     # for key, value in group_proba.items():
+    #     winners = {}
     #     counter = collections.Counter(value)
-    #     result = [key] + counter.most_common(1)[0][0].split(
-    #         '/') + [100*counter.most_common(1)[0][1]/NUMBER_OF_SIMULATIONS]
-    #     group_stage = pd.concat([group_stage, pd.Series(
-    #         result, index=group_stage.columns).to_frame().T])
+    #     modes = counter.most_common(3)
+    #     for i in range(3):
+    #         result = [key] + modes[i][0].split(
+    #             '/') + [100*modes[i][1]/NUMBER_OF_SIMULATIONS]
+    #         group_stage = pd.concat([group_stage, pd.Series(
+    #             result, index=group_stage.columns).to_frame().T])
+    #         if i == 0:
+    #             winners[1] = result[1]
+    #             winners[2] = result[2]
+    #     group_winners.append(winners)
 
     # print()
     # print(group_stage)
     # print()
+    # print(group_winners)
 
     # group_stage.to_csv('outputs/most_probable_group_outcomes.csv', index=False)
+
+
 
 
 
