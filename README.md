@@ -115,9 +115,33 @@ classDiagram
 
 ```mermaid
 flowchart LR
-    RS1([FRA 1 - 0 BEL])
-    RS2([NED 2 - 3 BRA])
-    QF1([FRA 1 - 2 BRA])
-    RS1-->|64%|QF1
-    RS2-->|56%|QF1
+    RS1([NED 1 - 1 USA])
+    RS2([ARG 1 - 1 DEN])
+    RS3([ESP 1 - 1 CRO])
+    RS4([BRA 1 - 0 URU])
+    RS5([SEN 0 - 1 ENG])
+    RS6([POL 1 - 1 FRA])
+    RS7([GER 1 - 1 BEL])
+    RS8([SUI 0 - 1 POR])
+    QF1([NED 1 - 1 ARG])
+    QF2([ESP 1 - 1 BRA])
+    QF3([ENG 1 - 1 FRA])
+    QF4([GER 1 - 1 POR])
+    SF1([ARG 1 - 1 ESP])
+    SF2([FRA 1 - 1 GER])
+    FNL([ESP 0 - 0 FRA])
+    RS1-->QF1
+    RS2-->QF1
+    RS3-->QF2
+    RS4-->QF2
+    RS5-->QF3
+    RS6-->QF3
+    RS7-->QF4
+    RS8-->QF4
+    QF1-->SF1
+    QF2-->SF1
+    QF3-->SF2
+    QF4-->SF2
+    SF1-->FNL
+    SF2-->FNL
 ```
