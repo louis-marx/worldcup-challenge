@@ -63,7 +63,7 @@ To model the number of goals a team scores in a given match, we decided to use a
 
 To simulate world cups, we have chosen an object-oriented approach. Starting by creating a class to represent a team, we progressively made our simulation more complex by creating matches, then groups and knockout phases, until we were able to model an entire tournament. The few points of attention were to algorithmically reproduce the FIFA logic to break ties within the groups and the distribution of teams at the beginning of the knockout phase. In our simulations, the scores of the games were simulated using the results of our predictive model.
 
-In addition, there is a report class that keeps track of the simulation results in order to give overall statistics. In fact, it counts the number of times each team manages to reach each phase during the simulations. By dividing these counts by the number of simulations, we obtain a percentage which we consider as the chance that a team reaches each phase. For example, if in 100 simulations Portugal reaches the quarter-finals 42 times, then Portugal is considered to have a 42% chance of reaching the quarter-finals.
+Of course our predictive model does not give us integer scores. For example the predicted score for Belgium against Argentina is 1.4 goals. This is not a problem since we intended to introduce a random dimension between the prediction of our model and the scores of our simulations. In fact, we use the prediction of our model as a parameter of a probability distribution in which the scores are drawn. We have chosen a Poisson distribution. It is particularly adapted in our case because it is discrete and its lambda parameter corresponds to its mean. In other words, it wonderfully represents a score and on average, the scores drawn corresponds to the one predicted by our model.
 
 ### Class Diagram
 
@@ -125,25 +125,31 @@ classDiagram
    Report --o Tournament
 ```
 
-### Most probable Outcome
+### Most Probable Outcomes
+
+In addition, there is a report class that keeps track of the simulation results in order to give overall statistics. In fact, it counts the number of times each team manages to reach each phase during the simulations. By dividing these counts by the number of simulations, we obtain a percentage which we consider as the chance that a team reaches each phase. For example, if in 100 simulations Portugal reaches the quarter-finals 42 times, then Portugal is considered to have a 42% chance of reaching the quarter-finals.
+
+![Simulation Report](outputs/simulation_report.png)
+
+To conclude, we wanted to represent the most probable outcome of the 2022 World Cup according to our model. For this, for each match, the predicted score is converted into an integer by taking the score that has the highest probability in the corresponding Poisson distribution. Of course, the scores are then averages and the results of the matches are very often 1-1. To break ties in the knockout phase and simulate shootouts, the team with the higher predicted score in our model wins the match.
 
 ```mermaid
 flowchart LR
-    RS1([NED 1 - 1 USA])
-    RS2([ARG 1 - 1 DEN])
+    RS1([SEN 1 - 0 IRN])
+    RS2([ARG 1 - 1 FRA])
     RS3([ESP 1 - 1 CRO])
     RS4([BRA 1 - 0 URU])
-    RS5([SEN 0 - 1 ENG])
-    RS6([POL 1 - 1 FRA])
+    RS5([NED 1 - 1 ENG])
+    RS6([MEX 1 - 1 DEN])
     RS7([GER 1 - 1 BEL])
     RS8([SUI 0 - 1 POR])
-    QF1([NED 1 - 1 ARG])
+    QF1([SEN 1 - 1 FRA])
     QF2([ESP 1 - 1 BRA])
-    QF3([ENG 1 - 1 FRA])
+    QF3([ENG 1 - 0 DEN])
     QF4([GER 1 - 1 POR])
-    SF1([ARG 1 - 1 ESP])
-    SF2([FRA 1 - 1 GER])
-    FNL([ESP 0 - 0 FRA])
+    SF1([FRA 1 - 1 ESP])
+    SF2([ENG 1 - 1 GER])
+    FNL([FRA 1 - 1 ENG])
     RS1-->QF1
     RS2-->QF1
     RS3-->QF2
