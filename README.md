@@ -2,9 +2,23 @@
 
 # Predicting FIFA World Cup 2022
 
-## Data
+This project is the work of Maxime Dolphin, Chloé Novis and Louis Marx. It is part of an internal challenge at PwC Belgium and aims at predicting the results of the 2022 soccer world cup. To do so, a database was provided to us by the organizers of the challenge.This database contained the list of all international soccer matches since 1993 with a number of variables related to:
+- The teams that played each other such as their country, their FIFA rank and points as well as several scores to evaluate the strength of their goalkeeper, defense, midfield and offense.
+- The context of the match such as the tournament, the country and the city in which it takes place
+- The result of the match including the score, the shoot outs and the winner
 
-A database was provided to us by the organizers of the challenge.
+Our approach to this challenge was as follows:
+- Our database is tailored to predict the outcome of a given match, not the tournament outcome directly.
+- To predict the outcome of the tournament, we will predict the outcome of each of the games that make up the tournament.
+- Developing a model that predicts both scores simultaneously is beyond our capabilities.
+- Given the time constraints and the fact that this work is done in our spare time, it is better to stick to what we know.
+- For a given game, we will predict each score individually (and therefore independently of each other).
+- In a tournament, a small variation of score at the beginning can have a big impact on the result at the end. Our result should reflect this variance.
+- Predicting a single result per game will lead to a single tournament outcome and therefore will not reflect the impact of this variance.
+- We will therefore not simulate a single tournament but several in which some randomness will be introduced.
+- The aggregation of all these simulations will give us probabilities for each team to reach each stage of the tournament.
+
+## Data
 
 ### Data Transformation
 
