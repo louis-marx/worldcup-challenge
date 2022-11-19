@@ -233,8 +233,15 @@ teams <- ungroup(teams)
 teams <- select(teams, -starts_with("opponent"))
 teams <- mutate(teams, date = NULL, tournament = NULL, country = NULL, team_hosting = NULL, team_score = NULL, result = NULL, shoot_out = NULL, city = NULL, continent = NULL)
 
-# Impute missing data with random forest
-teams <- rfImpute(team_fifa_rank ~ ., teams)
+# Impute missing data with 
+teams <- arrange(teams, team_fifa_rank)
+missing_values_rows <- which(rowSums(is.na(teams)) > 0)
+for (i in missing_values_rows){
+    j <- which(colSums(is.na(teams[i, ])) > 0)
+    teams[i, j] <- as.list(colMeans(teams[c(i - 1, i + 1), j]))
+}
+
+teams <- arrange(teams, team)
 
 # Quick preview of the dataframe to check if everything's ok
 print(str(teams))
@@ -246,7 +253,7 @@ print(str(teams))
 
 
 
-#########################  Create a games_to_predict dataset to prepare the simuation ####################
+#########################  Create a games_to_predict dataset to prepare the simulation ####################
 
 # Create an empty list
 games_to_predict <- NULL
@@ -291,7 +298,7 @@ saveRDS(games_to_predict, "data/games_to_predict.rds")
 
 
 
-#########################  Create a shootouts_to_predict dataset to prepare the simuation ####################
+#########################  Create a shootouts_to_predict dataset to prepare the simulation ####################
 
 # # Create an empty list
 # shootouts_to_predict <- NULL

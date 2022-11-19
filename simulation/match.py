@@ -1,8 +1,11 @@
 from numpy import random
+import pandas as pd
 
 
 class Match:
     """Soccer match"""
+
+    xgoal = pd.read_csv("data/xgoal.csv", index_col=0)
 
     def __init__(self, team, opponent):
         """Initialize a soccer game"""
@@ -11,9 +14,9 @@ class Match:
         self.score = {team: 0, opponent: 0}
 
     # To be further improved with modelling results
-    def play_game(self, xgoal, random):
+    def play_game(self, xgoal, rand):
         """Simulate the game result"""
-        if random:
+        if rand:
             self.score[self.team] = random.poisson(
                 xgoal.loc[self.team.team, self.opponent.team])
             self.score[self.opponent] = random.poisson(
@@ -31,6 +34,9 @@ class Match:
         elif self.score[self.team] < self.score[self.opponent]:
             winner = self.opponent
         else:
+            # teamxgoal = self.xgoal.loc[self.team.team, self.opponent.team]
+            # opponentxgoal = self.xgoal.loc[self.opponent.team, self.team.team]
+            # winner = self.team if teamxgoal >= opponentxgoal else self.opponent
             winner = random.choice([self.team, self.opponent])
         return winner
 
